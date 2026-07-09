@@ -1,0 +1,22 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: mysql-exporter
+  labels:
+    release: kube-prometheus-stack
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  # Allow Prometheus operator to select this ServiceMonitor across namespaces.
+  # Set `any: true` for broad matching or replace with `matchNames` and a list
+  # of namespaces where the Service runs (recommended for production)
+  namespaceSelector:
+    any: true
+  endpoints:
+    - port: metrics
+      interval: 30s
+      path: /metrics
+      honorLabels: true
+

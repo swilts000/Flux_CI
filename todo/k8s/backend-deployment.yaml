@@ -1,0 +1,58 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-api
+spec:
+
+  selector:
+    matchLabels:
+      app: todo-api
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: todo-api
+    spec:
+      initContainers:
+        - name: wait-for-mysql
+          image: busybox
+          command:
+            - sh
+            - -c
+            - |
+              until nc -z mysql 3306; do
+                echo waiting for mysql
+                sleep 2
+              done
+      containers:
+        - name: todo-api
+          image: backendtodo:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: todo-secret
+                  key: DB_PASSWORD
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:mysql://mysql:3306/tododb?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC"
+            - name: SPRING_DATASOURCE_USERNAME
+              value: "root"
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: todo-secret
+                  key: DB_PASSWORD
+            - name: JAKARTA_PERSISTENCE_JDBC_URL
+              value: "jdbc:mysql://mysql:3306/tododb?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC"
+          livenessProbe:
+            httpGet:
+              path: /api/todos
+              port: 8080
+          readinessProbe:
+            httpGet:
+              path: /api/todos
+              port: 8080

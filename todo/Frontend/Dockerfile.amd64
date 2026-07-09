@@ -1,0 +1,8 @@
+FROM gcr.io/distroless/static:nonroot
+COPY todo-frontend-amd64 /server
+COPY index.html /static/index.html
+COPY CSS /static/CSS
+COPY Script /static/Script
+EXPOSE 8080
+USER nonroot
+ENTRYPOINT ["/server"]

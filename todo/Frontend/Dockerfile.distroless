@@ -1,0 +1,16 @@
+# Multi-stage Dockerfile: build Go static binary, then run with distroless
+FROM golang:1.20-alpine AS builder
+WORKDIR /src
+COPY go.mod ./
+RUN apk add --no-cache git ca-certificates
+RUN go mod download
+COPY . .
+ENV CGO_ENABLED=0 GOOS=linux GOARCH=amd64
+RUN go build -ldflags "-s -w" -o /out/todo-frontend .
+
+FROM gcr.io/distroless/static-debian11
+COPY --from=builder /out/todo-frontend /todo-frontend
+EXPOSE 8080
+USER nonroot:nonroot
+ENTRYPOINT ["/todo-frontend"]
+

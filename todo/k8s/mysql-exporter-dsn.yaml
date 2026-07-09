@@ -1,0 +1,13 @@
+---
+# Secret holding the DSN for prom/mysqld-exporter.
+# Replace the base64-encoded value below with your DSN encoded in base64.
+# Example DSN (for sidecar): exporter:password@tcp(127.0.0.1:3306)/
+# base64-encode it locally: echo -n 'exporter:password@tcp(127.0.0.1:3306)/' | base64
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysql-exporter-dsn
+type: Opaque
+data:
+  DATA_SOURCE_NAME: <base64-dsn>
+
