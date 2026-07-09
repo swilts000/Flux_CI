@@ -4,7 +4,7 @@ This guide walks through bootstrapping Flux CD on a local Colima Kubernetes clus
 
 ---
 
-## Prerequisites
+## Prerequisites`
 
 - **macOS** with Homebrew installed
 - **GitHub account** with a personal access token (PAT)
@@ -165,75 +165,33 @@ All pods should be in `Running` state.
 
 ---
 
-## Step 7: Create Flux Kustomization for Todo App
+## Step 7: Verify Flux Kustomization Files
 
-### 7.1 Create the Flux source and kustomization directory
+The required kustomization files have already been created:
+
+### 7.1 Flux Kustomization for Todo App
+
+**File:** `clusters/colima/todo-app/kustomization.yaml`
+
+This tells Flux to deploy resources from `./todo/k8s`:
 
 ```bash
-mkdir -p ~/Desktop/Flux_CI/clusters/colima/todo-app
+cat ~/Desktop/Flux_CI/clusters/colima/todo-app/kustomization.yaml
 ```
 
-### 7.2 Create the Kustomization manifest
+### 7.2 K8s Kustomization
 
-Create `~/Desktop/Flux_CI/clusters/colima/todo-app/kustomization.yaml`:
+**File:** `todo/k8s/kustomization.yaml`
 
-```yaml
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: todo-app
-  namespace: flux-system
-spec:
-  interval: 5m0s
-  path: ./todo/k8s
-  prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  targetNamespace: default
-  healthChecks:
-    - apiVersion: apps/v1
-      kind: Deployment
-      name: todo-api
-      namespace: default
-    - apiVersion: apps/v1
-      kind: Deployment
-      name: todo-frontend
-      namespace: default
-    - apiVersion: apps/v1
-      kind: Deployment
-      name: mysql
-      namespace: default
+This lists all K8s resources to deploy:
+
+```bash
+cat ~/Desktop/Flux_CI/todo/k8s/kustomization.yaml
 ```
 
 ---
 
-## Step 8: Create Kustomization for K8s Manifests
-
-### 8.1 Create kustomization.yaml in the k8s directory
-
-Create `~/Desktop/Flux_CI/todo/k8s/kustomization.yaml`:
-
-```yaml
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-resources:
-  - secret.yaml
-  - todo-secret.yaml
-  - configmap.yaml
-  - mysql-pvc.yaml
-  - mysql-deployment.yaml
-  - mysql-service.yaml
-  - backend-deployment.yaml
-  - backend-service.yaml
-  - frontend-deployment.yaml
-  - frontend-service.yaml
-```
-
----
-
-## Step 9: Commit and Push Changes
+## Step 8: Commit and Push Changes
 
 ```bash
 cd ~/Desktop/Flux_CI
@@ -244,21 +202,21 @@ git push origin main
 
 ---
 
-## Step 10: Verify Flux Reconciliation
+## Step 9: Verify Flux Reconciliation
 
-### 10.1 Watch Flux reconcile the changes
+### 9.1 Watch Flux reconcile the changes
 
 ```bash
 flux get kustomizations --watch
 ```
 
-### 10.2 Check the todo-app kustomization status
+### 9.2 Check the todo-app kustomization status
 
 ```bash
 flux get kustomization todo-app
 ```
 
-### 10.3 Verify pods are running
+### 9.3 Verify pods are running
 
 ```bash
 kubectl get pods -w
@@ -271,19 +229,19 @@ Wait until all pods show `Running` status:
 
 ---
 
-## Step 11: Access the Todo Application
+## Step 10: Access the Todo Application
 
-### 11.1 Port-forward the frontend service
+### 10.1 Port-forward the frontend service
 
 ```bash
 kubectl port-forward svc/todo-frontend 8081:80
 ```
 
-### 11.2 Open in browser
+### 10.2 Open in browser
 
 Navigate to: **http://localhost:8081**
 
-### 11.3 Test the API directly (optional)
+### 10.3 Test the API directly (optional)
 
 ```bash
 # Port-forward backend
@@ -300,9 +258,9 @@ curl -X POST http://localhost:8080/api/todos \
 
 ---
 
-## Step 12: Verify GitOps Workflow
+## Step 11: Verify GitOps Workflow
 
-### 12.1 Make a change to test GitOps
+### 11.1 Make a change to test GitOps
 
 Edit `todo/k8s/frontend-deployment.yaml` and change replicas:
 
@@ -311,7 +269,7 @@ spec:
   replicas: 2  # Changed from 1
 ```
 
-### 12.2 Commit and push
+### 11.2 Commit and push
 
 ```bash
 git add .
@@ -319,7 +277,7 @@ git commit -m "Scale frontend to 2 replicas"
 git push origin main
 ```
 
-### 12.3 Watch Flux apply the change
+### 11.3 Watch Flux apply the change
 
 ```bash
 flux reconcile kustomization todo-app --with-source
