@@ -27,7 +27,7 @@ spec:
               done
       containers:
         - name: todo-api
-          image: hub.comcast.net/sandbox/todo-backend:latest
+          image: hub.comcast.net/sandbox/todo-backend:v2
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
