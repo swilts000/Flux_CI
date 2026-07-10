@@ -4,7 +4,7 @@ metadata:
   name: todo-app
   namespace: flux-system
 spec:
-  interval: 5m0s
+  interval: 5m
   path: ./todo/k8s
   prune: true
   sourceRef:
@@ -14,13 +14,13 @@ spec:
   healthChecks:
     - apiVersion: apps/v1
       kind: Deployment
+      name: mysql
+      namespace: default
+    - apiVersion: apps/v1
+      kind: Deployment
       name: todo-api
       namespace: default
     - apiVersion: apps/v1
       kind: Deployment
       name: todo-frontend
-      namespace: default
-    - apiVersion: apps/v1
-      kind: Deployment
-      name: mysql
       namespace: default
