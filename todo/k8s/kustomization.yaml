@@ -3,7 +3,6 @@ kind: Kustomization
 
 resources:
   - secret.yaml
-  - todo-secret.yaml
   - configmap.yaml
   - mysql-pvc.yaml
   - mysql-deployment.yaml

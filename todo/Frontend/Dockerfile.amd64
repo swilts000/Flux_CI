@@ -1,5 +1,9 @@
-FROM gcr.io/distroless/static:nonroot
+FROM alpine:3.19 AS builder
 COPY todo-frontend-amd64 /server
+RUN chmod +x /server
+
+FROM gcr.io/distroless/static:nonroot
+COPY --from=builder /server /server
 COPY index.html /static/index.html
 COPY CSS /static/CSS
 COPY Script /static/Script

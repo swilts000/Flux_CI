@@ -17,7 +17,7 @@ spec:
       containers:
         - name: todo-frontend
 #          image: todo-frontend:v1.0.0
-          image: frontend:latest
+          image: hub.comcast.net/sandbox/todo-frontend:v2
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
