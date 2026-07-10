@@ -12,3 +12,4 @@ resources:
   - frontend-deployment.yaml
   - frontend-service.yaml
   - servicemonitor.yaml
+  - mysql-servicemonitor.yaml
