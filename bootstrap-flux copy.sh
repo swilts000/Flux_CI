@@ -1,7 +1,7 @@
 set -e
 
-export GITHUB_USER="SWilts000_comcast"
-export GITHUB_REPO="fluxexample"
+export GITHUB_USER="SWilts000"
+export GITHUB_REPO=""
 export GITHUB_BRANCH="main"
 export FLUX_PATH="clusters/local"
 
