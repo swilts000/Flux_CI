@@ -4,23 +4,23 @@ metadata:
   name: todo-app
   namespace: flux-system
 spec:
-  interval: 5m
+  interval: 30s
   path: ./todo/k8s
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
-  targetNamespace: default
+  targetNamespace: testswilts
   healthChecks:
     - apiVersion: apps/v1
       kind: Deployment
       name: mysql
-      namespace: default
+      namespace: testswilts
     - apiVersion: apps/v1
       kind: Deployment
       name: todo-api
-      namespace: default
+      namespace: testswilts
     - apiVersion: apps/v1
       kind: Deployment
       name: todo-frontend
-      namespace: default
+      namespace: testswilts
