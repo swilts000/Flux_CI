@@ -4,7 +4,6 @@ kind: Deployment
 metadata:
   name: todo-api
 spec:
-
   selector:
     matchLabels:
       app: todo-api
