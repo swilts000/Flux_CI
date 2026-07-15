@@ -14,7 +14,7 @@ spec:
         name: prometheus-community
         namespace: flux-system
   values:
-    prometheus-node-exporter:
+    nodeExporter:
       enabled: false
     grafana:
       adminPassword: admin123
